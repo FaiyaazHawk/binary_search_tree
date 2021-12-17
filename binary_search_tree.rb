@@ -51,10 +51,42 @@ class Tree
 
     end
 
+    def delete(value, node = root)
+        if node.nil?
+            return node
+        elsif value < node.data
+            node.left =  delete(value, node.left)
+        elsif value > node.data
+            node.right = delete(value, node.right)
+        else #found node with matching value
+            
+            if (node.left.nil? && node.right.nil?) #if no child
+                node = nil
+            elsif node.left.nil? #if 1 right child
+                node = node.right
+            elsif node.right.nil? #if 1 left child
+                node = node.left
+            else                  #if 2 childs
+                node.data = findmin(node.right)
+                node.right = delete(node.data, node.right)
+            end
+        end
+        return node
+    end
+
+    def findmin(node)
+        min = node
+        until node.left.nil?
+            min = node.left
+        end
+        return min.data
+    end
+
 end
 
 array = [1,2,3,4,5,6,7]
-newtree = Tree.new(array)
-newtree.buildTree(array)
-newtree.insert(8)
-pp newtree
+tree = Tree.new(array)
+tree.buildTree(array)
+pp tree
+tree.delete(3)
+pp tree
