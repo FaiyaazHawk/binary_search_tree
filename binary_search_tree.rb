@@ -74,7 +74,26 @@ class Tree
         return node
     end
 
-    def findmin(node)
+    def find(value, node = root)
+        if node.nil? || node.data == value
+            return node
+        else
+            if value < node.data
+                find(value, node.left)
+            end
+            if value > node.data
+                find(value, node.right)
+            end
+        end
+    end
+
+
+
+    #########################################
+    #helper function
+    private
+
+    def findmin(node) #returns minimum value from a given node
         min = node
         until node.left.nil?
             min = node.left
@@ -87,6 +106,6 @@ end
 array = [1,2,3,4,5,6,7]
 tree = Tree.new(array)
 tree.buildTree(array)
-pp tree
-tree.delete(3)
-pp tree
+
+
+
