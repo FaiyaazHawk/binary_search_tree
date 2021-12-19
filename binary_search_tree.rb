@@ -87,6 +87,37 @@ class Tree
         end
     end
 
+    def level_order(node = @root, &block)
+        queue = [node]
+        result = []
+        until queue.empty?
+            node = queue.shift
+            if block_given? # appropriate work on each node if block given, else data stored to result array
+                yield (node)
+            else
+                result << node.data
+            end
+            queue << node.left unless node.left.nil?
+            queue << node.right unless node.right.nil?
+        end
+        result unless block_given? #result array returned if no block provided
+    end
+
+    def in_order(node = @root, &block)
+        result = []
+        if node == nil
+            return 
+        end
+
+        in_order(node.left)
+        block_given? ? yield(node) : result << node.data
+        in_order(node.right)
+        
+        
+        return result
+        
+    end
+
 
 
     #########################################
@@ -106,6 +137,7 @@ end
 array = [1,2,3,4,5,6,7]
 tree = Tree.new(array)
 tree.buildTree(array)
+p tree.in_order
 
 
 
