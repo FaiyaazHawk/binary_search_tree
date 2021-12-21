@@ -103,17 +103,10 @@ class Tree
         result unless block_given? #result array returned if no block provided
     end
 
-    def in_order(node = @root, &block)
+    def in_order(node = @root)
+        
         result = []
-        if node == nil
-            return 
-        end
-
-        in_order(node.left)
-        block_given? ? yield(node) : result << node.data
-        in_order(node.right)
-        
-        
+        in_order_recurse(node, result)
         return result
         
     end
@@ -132,12 +125,24 @@ class Tree
         return min.data
     end
 
+    def in_order_recurse(node, result)
+        
+        if node == nil
+            return 
+        end
+
+        in_order(node.left)
+        result.push(node.data)
+        in_order(node.right)
+
+    end
+
 end
 
 array = [1,2,3,4,5,6,7]
 tree = Tree.new(array)
 tree.buildTree(array)
-p tree.in_order
+p tree.in_order()
 
 
 
