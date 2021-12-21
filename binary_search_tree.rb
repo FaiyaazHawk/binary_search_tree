@@ -111,6 +111,22 @@ class Tree
         
     end
 
+    def preorder(node = @root)
+
+        result = []
+        preorder_recurse(node, result)
+        return result
+        
+    end
+
+    def postorder(node = @root)
+
+        result = []
+        postorder_recurse(node,result)
+        return result
+        
+    end
+
 
 
     #########################################
@@ -132,8 +148,29 @@ class Tree
         end
 
         in_order_recurse(node.left,result)
-        result << node.data
+        block_given? ? yield(node) : result << node.data
         in_order_recurse(node.right, result)
+        
+    end
+
+    def preorder_recurse(node,result)
+        if node == nil
+            return
+        end
+
+        block_given? ? yield(node) : result << node.data
+        preorder_recurse(node.left,result)
+        preorder_recurse(node.right,result)
+    end
+
+    def postorder_recurse(node,result)
+        if node == nil
+            return
+        end
+        
+        postorder_recurse(node.left,result)
+        postorder_recurse(node.right,result)
+        block_given? ? yield(node) : result << node.data
         
     end
 
@@ -143,6 +180,7 @@ array = [1,2,3,4,5,6,7]
 tree = Tree.new(array)
 tree.buildTree(array)
 p tree.in_order()
-
+p tree.preorder()
+p tree.postorder
 
 
