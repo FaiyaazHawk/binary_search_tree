@@ -131,10 +131,10 @@ class Tree
             return 
         end
 
-        in_order(node.left)
-        result.push(node.data)
-        in_order(node.right)
-
+        in_order_recurse(node.left,result)
+        result << node.data
+        in_order_recurse(node.right, result)
+        
     end
 
 end
