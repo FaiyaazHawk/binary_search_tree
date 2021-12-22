@@ -12,8 +12,8 @@ class Tree
     attr_accessor :data, :root
 
     def initialize(array)
-        @data = array.sort.uniq
-        @root = buildTree(array)
+        sorted = array.sort.uniq
+        @root = buildTree(sorted)
     end
 
     def buildTree(array)
@@ -127,6 +127,57 @@ class Tree
         
     end
 
+    def height(node = @root)
+        if node == nil
+            return -1
+        else
+            leftHeight = height(node.left)
+            rightHeight = height(node.right)
+            return [leftHeight,rightHeight].max+1
+        end
+    end
+
+    def depth(node = @root,base = @root, depth = 0)
+        if node == base
+            return 0
+        end
+
+        if node == nil
+            return -1
+        end
+
+        if node.data < base.data
+            depth +=1
+            depth(node.left,base,depth)
+        elsif node.data > base.data
+            depth +=1
+            depth(node.right,base,depth)
+        else
+            depth
+        end
+
+    end
+
+    def balanced?(root = @root)
+        leftsubtree = height(root.left)
+        rightsubtree = height(root.right)
+
+        if (leftsubtree - rightsubtree).abs > 1
+            return false
+        else
+            return true
+        end
+    end
+
+    def rebalance
+        @root = buildTree(in_order)
+    end
+    ###from assigment
+    def pretty_print(node = @root, prefix = '', is_left = true)
+        pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
+        puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
+        pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
+    end
 
 
     #########################################
@@ -173,14 +224,30 @@ class Tree
         block_given? ? yield(node) : result << node.data
         
     end
+    
+
+    
 
 end
 
-array = [1,2,3,4,5,6,7]
-tree = Tree.new(array)
-tree.buildTree(array)
-p tree.in_order()
-p tree.preorder()
+tree = Tree.new(Array.new(15) { rand(1..100) })
+tree.pretty_print
+puts 'new tree'
+p tree.balanced?
+puts 'orders'
+p tree.level_order
+p tree.preorder
 p tree.postorder
-
-
+p tree.in_order
+tree.insert(115)
+tree.insert(135)
+tree.insert(167)
+tree.insert(174)    
+p tree.balanced?
+tree.rebalance
+p tree.balanced?
+puts 'orders'
+p tree.level_order
+p tree.preorder
+p tree.postorder
+p tree.in_order
