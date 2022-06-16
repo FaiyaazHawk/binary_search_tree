@@ -1,3 +1,4 @@
+#basic node class
 class Node
     attr_accessor :data, :left, :right
     def initialize(data)
@@ -60,12 +61,14 @@ class Tree
             node.right = delete(value, node.right)
         else #found node with matching value
             
-            if (node.left.nil? && node.right.nil?) #if no child
-                node = nil
-            elsif node.left.nil? #if 1 right child
-                node = node.right
+            if node.left.nil? #if 1 right child
+                temp = root.right
+                root = nil
+                return temp
             elsif node.right.nil? #if 1 left child
-                node = node.left
+                temp = node.left
+                root = nil
+                return temp
             else                  #if 2 childs
                 node.data = findmin(node.right)
                 node.right = delete(node.data, node.right)
