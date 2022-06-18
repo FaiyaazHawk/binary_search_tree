@@ -52,26 +52,30 @@ class Tree
 
     end
 
-    def delete(value, node = root)
+    def delete(value, node = @root, parent = nil)
+        
         if node.nil?
             return node
         elsif value < node.data
-            node.left =  delete(value, node.left)
+            parent = node    
+            node.left =  delete(value, node.left, parent)
         elsif value > node.data
-            node.right = delete(value, node.right)
+            parent = node
+            node.right = delete(value, node.right, parent)
         else #found node with matching value
-            
-            if node.left.nil? #if 1 right child
-                temp = root.right
-                root = nil
-                return temp
+            if node.right.nil? && node.right.nil? # no children
+                if parent.right.nil?
+                   return parent.left = nil
+                else
+                    return parent.right = nil
+                end
+            elsif node.left.nil? #if 1 right child
+                return parent.right = node.right    
             elsif node.right.nil? #if 1 left child
-                temp = node.left
-                root = nil
-                return temp
-            else                  #if 2 childs
+                return parent.left = node.left
+            else                  #if 2 children
                 node.data = findmin(node.right)
-                node.right = delete(node.data, node.right)
+                node.right = delete(node.data, node.right, parent)
             end
         end
         return node
@@ -243,9 +247,14 @@ p tree.preorder
 p tree.postorder
 p tree.in_order
 tree.insert(115)
+tree.insert(75)
+tree.insert(110)
 tree.insert(135)
 tree.insert(167)
-tree.insert(174)    
+tree.insert(174)
+tree.pretty_print
+tree.delete(174)  
+tree.pretty_print
 p tree.balanced?
 tree.rebalance
 p tree.balanced?
